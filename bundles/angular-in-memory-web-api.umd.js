@@ -1422,4 +1422,4 @@
     Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
-//# sourceMappingURL=in-mem.umd.js.map
+//# sourceMappingURL=angular-in-memory-web-api.umd.js.map

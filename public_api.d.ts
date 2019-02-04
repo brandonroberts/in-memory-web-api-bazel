@@ -1,1 +1,1 @@
-export * from './in-mem';
+export * from './angular-in-memory-web-api';

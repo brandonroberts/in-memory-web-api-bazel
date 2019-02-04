@@ -1585,4 +1585,4 @@ InMemoryWebApiModule.decorators = [
  */
 
 export { BackendService, STATUS, STATUS_CODE_INFO, getStatusText, isSuccess, HttpClientBackendService, InMemoryWebApiModule, httpClientInMemBackendServiceFactory, HttpClientInMemoryWebApiModule, InMemoryDbService, InMemoryBackendConfigArgs, InMemoryBackendConfig, parseUri, removeTrailingSlash };
-//# sourceMappingURL=in-mem.js.map
+//# sourceMappingURL=angular-in-memory-web-api.js.map
