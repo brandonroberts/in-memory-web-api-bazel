@@ -1,11 +1,11 @@
 import { Observable, BehaviorSubject, of, from } from 'rxjs';
-import { Injectable, Inject, Optional, NgModule } from '@angular/core';
 import { concatMap, first, map } from 'rxjs/operators';
+import { Injectable, Inject, Optional, NgModule } from '@angular/core';
 import { HttpHeaders, HttpParams, HttpResponse, HttpXhrBackend, XhrFactory, HttpBackend } from '@angular/common/http';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const STATUS = {
@@ -66,6 +66,7 @@ const STATUS = {
     INSUFFICIENT_STORAGE: 507,
     NETWORK_AUTHENTICATION_REQUIRED: 511
 };
+/*tslint:disable:quotemark max-line-length one-line */
 /** @type {?} */
 const STATUS_CODE_INFO = {
     '100': {
@@ -478,8 +479,9 @@ function isSuccess(status) { return status >= 200 && status < 300; }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+// Replaces use of RxJS delay. See v0.5.4.
 /**
  * adds specified delay (in ms) to both next and error channels of the response observable
  * @template T
@@ -488,35 +490,59 @@ function isSuccess(status) { return status >= 200 && status < 300; }
  * @return {?}
  */
 function delayResponse(response$, delayMs) {
-    return new Observable(observer => {
+    return new Observable((/**
+     * @param {?} observer
+     * @return {?}
+     */
+    observer => {
         /** @type {?} */
         let completePending = false;
         /** @type {?} */
         let nextPending = false;
         /** @type {?} */
-        const subscription = response$.subscribe(value => {
+        const subscription = response$.subscribe((/**
+         * @param {?} value
+         * @return {?}
+         */
+        value => {
             nextPending = true;
-            setTimeout(() => {
+            setTimeout((/**
+             * @return {?}
+             */
+            () => {
                 observer.next(value);
                 if (completePending) {
                     observer.complete();
                 }
-            }, delayMs);
-        }, error => setTimeout(() => observer.error(error), delayMs), () => {
+            }), delayMs);
+        }), (/**
+         * @param {?} error
+         * @return {?}
+         */
+        error => setTimeout((/**
+         * @return {?}
+         */
+        () => observer.error(error)), delayMs)), (/**
+         * @return {?}
+         */
+        () => {
             completePending = true;
             if (!nextPending) {
                 observer.complete();
             }
-        });
-        return () => {
+        }));
+        return (/**
+         * @return {?}
+         */
+        () => {
             return subscription.unsubscribe();
-        };
-    });
+        });
+    }));
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Interface for a class that creates an in-memory database
@@ -537,6 +563,7 @@ class InMemoryDbService {
  */
 class InMemoryBackendConfigArgs {
 }
+/////////////////////////////////
 /**
  *  InMemoryBackendService configuration options
  *  Usage:
@@ -590,6 +617,8 @@ InMemoryBackendConfig.ctorParameters = () => [
  * @return {?}
  */
 function parseUri(str) {
+    // Adapted from parseuri package - http://blog.stevenlevithan.com/archives/parseuri
+    // tslint:disable-next-line:max-line-length
     /** @type {?} */
     const URL_REGEX = /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/;
     /** @type {?} */
@@ -630,7 +659,7 @@ function removeTrailingSlash(path) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Base class for in-memory web api back-ends
@@ -655,7 +684,9 @@ class BackendService {
         this.config.rootPath = loc.path; // default to path when app is served (e.g.'/')
         Object.assign(this.config, config);
     }
+    ////  protected /////
     /**
+     * @protected
      * @return {?}
      */
     get dbReady() {
@@ -664,7 +695,11 @@ class BackendService {
             this.dbReadySubject = new BehaviorSubject(false);
             this.resetDb();
         }
-        return this.dbReadySubject.asObservable().pipe(first((r) => r));
+        return this.dbReadySubject.asObservable().pipe(first((/**
+         * @param {?} r
+         * @return {?}
+         */
+        (r) => r)));
     }
     /**
      * Process Request and return an Observable of Http Response object
@@ -689,20 +724,27 @@ class BackendService {
      *     `inMemDbService.get(requestInfo)`
      *     which must return either an Observable of the response type
      *     for this http library or null|undefined (which means "keep processing").
+     * @protected
      * @param {?} req
      * @return {?}
      */
     handleRequest(req) {
         //  handle the request when there is an in-memory database
-        return this.dbReady.pipe(concatMap(() => this.handleRequest_(req)));
+        return this.dbReady.pipe(concatMap((/**
+         * @return {?}
+         */
+        () => this.handleRequest_(req))));
     }
     /**
+     * @protected
      * @param {?} req
      * @return {?}
      */
     handleRequest_(req) {
         /** @type {?} */
         const url = req.urlWithParams ? req.urlWithParams : req.url;
+        // Try override parser
+        // If no override parser or it returns nothing, use default parser
         /** @type {?} */
         const parser = this.bind('parseRequestUrl');
         /** @type {?} */
@@ -734,6 +776,9 @@ class BackendService {
         /** @type {?} */
         const methodInterceptor = this.bind(reqInfo.method);
         if (methodInterceptor) {
+            // InMemoryDbService intercepts this HTTP method.
+            // if interceptor produced a response, return it.
+            // else InMemoryDbService chose not to intercept; continue processing.
             /** @type {?} */
             const interceptorResponse = methodInterceptor(reqInfo);
             if (interceptorResponse) {
@@ -742,7 +787,10 @@ class BackendService {
         }
         if (this.db[collectionName]) {
             // request is for a known collection of the InMemoryDbService
-            return this.createResponse$(() => this.collectionHandler(reqInfo));
+            return this.createResponse$((/**
+             * @return {?}
+             */
+            () => this.collectionHandler(reqInfo)));
         }
         if (this.config.passThruUnknownUrl) {
             // unknown collection; pass request thru to a "real" backend.
@@ -750,10 +798,14 @@ class BackendService {
         }
         // 404 - can't handle this request
         resOptions = this.createErrorResponseOptions(url, STATUS.NOT_FOUND, `Collection '${collectionName}' not found`);
-        return this.createResponse$(() => resOptions);
+        return this.createResponse$((/**
+         * @return {?}
+         */
+        () => resOptions));
     }
     /**
      * Add configured delay to response observable unless delay === 0
+     * @protected
      * @param {?} response
      * @return {?}
      */
@@ -766,25 +818,40 @@ class BackendService {
      * Apply query/search parameters as a filter over the collection
      * This impl only supports RegExp queries on string properties of the collection
      * ANDs the conditions together
+     * @protected
      * @param {?} collection
      * @param {?} query
      * @return {?}
      */
     applyQuery(collection, query) {
+        // extract filtering conditions - {propertyName, RegExps) - from query/search parameters
         /** @type {?} */
         const conditions = [];
         /** @type {?} */
         const caseSensitive = this.config.caseSensitiveSearch ? undefined : 'i';
-        query.forEach((value, name) => {
-            value.forEach(v => conditions.push({ name, rx: new RegExp(decodeURI(v), caseSensitive) }));
-        });
+        query.forEach((/**
+         * @param {?} value
+         * @param {?} name
+         * @return {?}
+         */
+        (value, name) => {
+            value.forEach((/**
+             * @param {?} v
+             * @return {?}
+             */
+            v => conditions.push({ name, rx: new RegExp(decodeURI(v), caseSensitive) })));
+        }));
         /** @type {?} */
         const len = conditions.length;
         if (!len) {
             return collection;
         }
         // AND the RegExp conditions
-        return collection.filter(row => {
+        return collection.filter((/**
+         * @param {?} row
+         * @return {?}
+         */
+        row => {
             /** @type {?} */
             let ok = true;
             /** @type {?} */
@@ -796,20 +863,22 @@ class BackendService {
                 ok = cond.rx.test(row[cond.name]);
             }
             return ok;
-        });
+        }));
     }
     /**
      * Get a method from the `InMemoryDbService` (if it exists), bound to that service
+     * @protected
      * @template T
      * @param {?} methodName
      * @return {?}
      */
     bind(methodName) {
         /** @type {?} */
-        const fn = /** @type {?} */ (this.inMemDbService[methodName]);
-        return fn ? /** @type {?} */ (fn.bind(this.inMemDbService)) : undefined;
+        const fn = (/** @type {?} */ (this.inMemDbService[methodName]));
+        return fn ? (/** @type {?} */ (fn.bind(this.inMemDbService))) : undefined;
     }
     /**
+     * @protected
      * @param {?} data
      * @return {?}
      */
@@ -817,6 +886,7 @@ class BackendService {
         return this.config.dataEncapsulation ? { data } : data;
     }
     /**
+     * @protected
      * @param {?} data
      * @return {?}
      */
@@ -824,10 +894,12 @@ class BackendService {
         return JSON.parse(JSON.stringify(data));
     }
     /**
+     * @protected
      * @param {?} reqInfo
      * @return {?}
      */
     collectionHandler(reqInfo) {
+        // const req = reqInfo.req;
         /** @type {?} */
         let resOptions;
         switch (reqInfo.method) {
@@ -847,6 +919,7 @@ class BackendService {
                 resOptions = this.createErrorResponseOptions(reqInfo.url, STATUS.METHOD_NOT_ALLOWED, 'Method not allowed');
                 break;
         }
+        // If `inMemDbService.responseInterceptor` exists, let it morph the response options
         /** @type {?} */
         const interceptor = this.bind('responseInterceptor');
         return interceptor ? interceptor(resOptions, reqInfo) : resOptions;
@@ -867,6 +940,7 @@ class BackendService {
      *   http.post('commands/resetdb', undefined);
      *   http.get('commands/config');
      *   http.post('commands/config', '{"delay":1000}');
+     * @protected
      * @param {?} reqInfo
      * @return {?}
      */
@@ -882,7 +956,13 @@ class BackendService {
         switch (command) {
             case 'resetdb':
                 resOptions.status = STATUS.NO_CONTENT;
-                return this.resetDb(reqInfo).pipe(concatMap(() => this.createResponse$(() => resOptions, false /* no latency delay */)));
+                return this.resetDb(reqInfo).pipe(concatMap((/**
+                 * @return {?}
+                 */
+                () => this.createResponse$((/**
+                 * @return {?}
+                 */
+                () => resOptions), false /* no latency delay */))));
             case 'config':
                 if (method === 'get') {
                     resOptions.status = STATUS.OK;
@@ -900,9 +980,13 @@ class BackendService {
             default:
                 resOptions = this.createErrorResponseOptions(reqInfo.url, STATUS.INTERNAL_SERVER_ERROR, `Unknown command "${command}"`);
         }
-        return this.createResponse$(() => resOptions, false /* no latency delay */);
+        return this.createResponse$((/**
+         * @return {?}
+         */
+        () => resOptions), false /* no latency delay */);
     }
     /**
+     * @protected
      * @param {?} url
      * @param {?} status
      * @param {?} message
@@ -918,6 +1002,7 @@ class BackendService {
     }
     /**
      * Create a cold response Observable from a factory for ResponseOptions
+     * @protected
      * @param {?} resOptionsFactory - creates ResponseOptions when observable is subscribed
      * @param {?=} withDelay - if true (default), add simulated latency delay from configuration
      * @return {?}
@@ -931,11 +1016,16 @@ class BackendService {
     }
     /**
      * Create a cold Observable of ResponseOptions.
+     * @protected
      * @param {?} resOptionsFactory - creates ResponseOptions when observable is subscribed
      * @return {?}
      */
     createResponseOptions$(resOptionsFactory) {
-        return new Observable((responseObserver) => {
+        return new Observable((/**
+         * @param {?} responseObserver
+         * @return {?}
+         */
+        (responseObserver) => {
             /** @type {?} */
             let resOptions;
             try {
@@ -951,9 +1041,7 @@ class BackendService {
             try {
                 resOptions.statusText = getStatusText(status);
             }
-            catch (e) { /* ignore failure */
-                /* ignore failure */ 
-            }
+            catch (e) { /* ignore failure */ }
             if (isSuccess(status)) {
                 responseObserver.next(resOptions);
                 responseObserver.complete();
@@ -961,10 +1049,14 @@ class BackendService {
             else {
                 responseObserver.error(resOptions);
             }
-            return () => { }; // unsubscribe function
-        });
+            return (/**
+             * @return {?}
+             */
+            () => { }); // unsubscribe function
+        }));
     }
     /**
+     * @protected
      * @param {?} __0
      * @return {?}
      */
@@ -982,18 +1074,24 @@ class BackendService {
     }
     /**
      * Find first instance of item in collection by `item.id`
+     * @protected
      * @template T
      * @param {?} collection
      * @param {?} id
      * @return {?}
      */
     findById(collection, id) {
-        return collection.find((item) => item.id === id);
+        return collection.find((/**
+         * @param {?} item
+         * @return {?}
+         */
+        (item) => item.id === id));
     }
     /**
      * Generate the next available id for item in this collection
      * Use method from `inMemDbService` if it exists and returns a value,
      * else delegates to `genIdDefault`.
+     * @protected
      * @template T
      * @param {?} collection - collection of items with `id` key property
      * @param {?} collectionName
@@ -1015,6 +1113,7 @@ class BackendService {
     /**
      * Default generator of the next available id for item in this collection
      * This default implementation works only for numeric ids.
+     * @protected
      * @template T
      * @param {?} collection - collection of items with `id` key property
      * @param {?} collectionName - name of the collection
@@ -1026,12 +1125,18 @@ class BackendService {
         }
         /** @type {?} */
         let maxId = 0;
-        collection.reduce((prev, item) => {
+        collection.reduce((/**
+         * @param {?} prev
+         * @param {?} item
+         * @return {?}
+         */
+        (prev, item) => {
             maxId = Math.max(maxId, typeof item.id === 'number' ? item.id : maxId);
-        }, undefined);
+        }), undefined);
         return maxId + 1;
     }
     /**
+     * @protected
      * @param {?} __0
      * @return {?}
      */
@@ -1056,13 +1161,16 @@ class BackendService {
     }
     /**
      * Get location info from a url, even on server where `document` is not defined
+     * @protected
      * @param {?} url
      * @return {?}
      */
     getLocation(url) {
         if (!url.startsWith('http')) {
+            // get the document iff running in browser
             /** @type {?} */
             const doc = (typeof document === 'undefined') ? undefined : document;
+            // add host info to url before parsing.  Use a fake host when not in browser.
             /** @type {?} */
             const base = doc ? doc.location.protocol + '//' + doc.location.host : 'http://fake';
             url = url.startsWith('/') ? base + url : base + '/' + url;
@@ -1073,6 +1181,7 @@ class BackendService {
     /**
      * get or create the function that passes unhandled requests
      * through to the "real" backend.
+     * @protected
      * @return {?}
      */
     getPassThruBackend() {
@@ -1083,6 +1192,7 @@ class BackendService {
     /**
      * Get utility methods from this service instance.
      * Useful within an HTTP method override
+     * @protected
      * @return {?}
      */
     getRequestInfoUtils() {
@@ -1090,8 +1200,14 @@ class BackendService {
             createResponse$: this.createResponse$.bind(this),
             findById: this.findById.bind(this),
             isCollectionIdNumeric: this.isCollectionIdNumeric.bind(this),
-            getConfig: () => this.config,
-            getDb: () => this.db,
+            getConfig: (/**
+             * @return {?}
+             */
+            () => this.config),
+            getDb: (/**
+             * @return {?}
+             */
+            () => this.db),
             getJsonBody: this.getJsonBody.bind(this),
             getLocation: this.getLocation.bind(this),
             getPassThruBackend: this.getPassThruBackend.bind(this),
@@ -1099,15 +1215,21 @@ class BackendService {
         };
     }
     /**
+     * @protected
      * @param {?} collection
      * @param {?} id
      * @return {?}
      */
     indexOf(collection, id) {
-        return collection.findIndex((item) => item.id === id);
+        return collection.findIndex((/**
+         * @param {?} item
+         * @return {?}
+         */
+        (item) => item.id === id));
     }
     /**
      * Parse the id as a number. Return original value if not a number.
+     * @protected
      * @param {?} collection
      * @param {?} collectionName
      * @param {?} id
@@ -1127,6 +1249,7 @@ class BackendService {
      * return true if can determine that the collection's `item.id` is a number
      * This implementation can't tell if the collection is empty so it assumes NO
      *
+     * @protected
      * @template T
      * @param {?} collection
      * @param {?} collectionName
@@ -1153,6 +1276,7 @@ class BackendService {
      * The following api base strings are considered identical: 'a/b' ~ 'some/api/' ~ `two/segments'
      *
      * To replace this default method, assign your alternative to your InMemDbService['parseRequestUrl']
+     * @protected
      * @param {?} url
      * @return {?}
      */
@@ -1176,6 +1300,10 @@ class BackendService {
             const pathSegments = path.split('/');
             /** @type {?} */
             let segmentIx = 0;
+            // apiBase: the front part of the path devoted to getting to the api route
+            // Assumes first path segment if no config.apiBase
+            // else ignores as many path segments as are in config.apiBase
+            // Does NOT care what the api base chars actually are.
             /** @type {?} */
             let apiBase;
             // tslint:disable-next-line:triple-equals
@@ -1210,7 +1338,10 @@ class BackendService {
             throw new Error(msg);
         }
     }
+    // Create entity
+    // Can update an existing entity too if post409 is false.
     /**
+     * @protected
      * @param {?} __0
      * @return {?}
      */
@@ -1259,7 +1390,10 @@ class BackendService {
                 { headers, body, status: STATUS.OK }; // successful; return entity
         }
     }
+    // Update existing entity
+    // Can create an entity too if put404 is false.
     /**
+     * @protected
      * @param {?} __0
      * @return {?}
      */
@@ -1297,6 +1431,7 @@ class BackendService {
         }
     }
     /**
+     * @protected
      * @param {?} collection
      * @param {?} id
      * @return {?}
@@ -1313,6 +1448,7 @@ class BackendService {
     /**
      * Tell your in-mem "database" to reset.
      * returns Observable of the database because resetting it could be async
+     * @protected
      * @param {?=} reqInfo
      * @return {?}
      */
@@ -1322,19 +1458,23 @@ class BackendService {
         const db = this.inMemDbService.createDb(reqInfo);
         /** @type {?} */
         const db$ = db instanceof Observable ? db :
-            typeof (/** @type {?} */ (db)).then === 'function' ? from(/** @type {?} */ (db)) :
+            typeof ((/** @type {?} */ (db))).then === 'function' ? from((/** @type {?} */ (db))) :
                 of(db);
-        db$.pipe(first()).subscribe((d) => {
+        db$.pipe(first()).subscribe((/**
+         * @param {?} d
+         * @return {?}
+         */
+        (d) => {
             this.db = d;
             this.dbReadySubject.next(true);
-        });
+        }));
         return this.dbReady;
     }
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * For Angular `HttpClient` simulate the behavior of a RESTy web api
@@ -1386,10 +1526,15 @@ class HttpClientBackendService extends BackendService {
             const err = error.message || error;
             /** @type {?} */
             const resOptions = this.createErrorResponseOptions(req.url, STATUS.INTERNAL_SERVER_ERROR, `${err}`);
-            return this.createResponse$(() => resOptions);
+            return this.createResponse$((/**
+             * @return {?}
+             */
+            () => resOptions));
         }
     }
+    ////  protected overrides /////
     /**
+     * @protected
      * @param {?} req
      * @return {?}
      */
@@ -1397,6 +1542,7 @@ class HttpClientBackendService extends BackendService {
         return req.body;
     }
     /**
+     * @protected
      * @param {?} req
      * @return {?}
      */
@@ -1404,6 +1550,7 @@ class HttpClientBackendService extends BackendService {
         return (req.method || 'get').toLowerCase();
     }
     /**
+     * @protected
      * @param {?} headers
      * @return {?}
      */
@@ -1411,6 +1558,7 @@ class HttpClientBackendService extends BackendService {
         return new HttpHeaders(headers);
     }
     /**
+     * @protected
      * @param {?} search
      * @return {?}
      */
@@ -1420,18 +1568,28 @@ class HttpClientBackendService extends BackendService {
         if (search) {
             /** @type {?} */
             const params = new HttpParams({ fromString: search });
-            params.keys().forEach(p => map$$1.set(p, params.getAll(p)));
+            params.keys().forEach((/**
+             * @param {?} p
+             * @return {?}
+             */
+            p => map$$1.set(p, params.getAll(p))));
         }
         return map$$1;
     }
     /**
+     * @protected
      * @param {?} resOptions$
      * @return {?}
      */
     createResponse$fromResponseOptions$(resOptions$) {
-        return resOptions$.pipe(map((opts) => new HttpResponse(opts)));
+        return resOptions$.pipe(map((/**
+         * @param {?} opts
+         * @return {?}
+         */
+        (opts) => new HttpResponse(opts))));
     }
     /**
+     * @protected
      * @return {?}
      */
     createPassThruBackend() {
@@ -1456,8 +1614,10 @@ HttpClientBackendService.ctorParameters = () => [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+// Internal - Creates the in-mem backend for the HttpClient module
+// AoT requires factory to be exported
 /**
  * @param {?} dbService
  * @param {?} options
@@ -1478,12 +1638,12 @@ class HttpClientInMemoryWebApiModule {
      *  Usually imported in the root application module.
      *  Can import in a lazy feature module too, which will shadow modules loaded earlier
      *
+     *
      * \@example
      * HttpInMemoryWebApiModule.forRoot(dbCreator);
      * HttpInMemoryWebApiModule.forRoot(dbCreator, {useValue: {delay:600}});
-     * @param {?} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
-     * @param {?=} options - Options for configuring the backend
-     *
+     * @param {?} dbCreator
+     * @param {?=} options
      * @return {?}
      */
     static forRoot(dbCreator, options) {
@@ -1517,7 +1677,7 @@ HttpClientInMemoryWebApiModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class InMemoryWebApiModule {
     /**
@@ -1528,12 +1688,12 @@ class InMemoryWebApiModule {
      *  Usually imported in the root application module.
      *  Can import in a lazy feature module too, which will shadow modules loaded earlier
      *
+     *
      * \@example
      * InMemoryWebApiModule.forRoot(dbCreator);
      * InMemoryWebApiModule.forRoot(dbCreator, {useValue: {delay:600}});
-     * @param {?} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
-     * @param {?=} options - Options for configuring the backend
-     *
+     * @param {?} dbCreator
+     * @param {?=} options
      * @return {?}
      */
     static forRoot(dbCreator, options) {
@@ -1567,22 +1727,14 @@ InMemoryWebApiModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,uselessCode} checked by tsc
- */
+export { BackendService, getStatusText, isSuccess, STATUS, STATUS_CODE_INFO, HttpClientBackendService, InMemoryWebApiModule, httpClientInMemBackendServiceFactory, HttpClientInMemoryWebApiModule, parseUri, removeTrailingSlash, InMemoryDbService, InMemoryBackendConfigArgs, InMemoryBackendConfig };
 
-/**
- * Generated bundle index. Do not edit.
- */
-
-export { BackendService, STATUS, STATUS_CODE_INFO, getStatusText, isSuccess, HttpClientBackendService, InMemoryWebApiModule, httpClientInMemBackendServiceFactory, HttpClientInMemoryWebApiModule, InMemoryDbService, InMemoryBackendConfigArgs, InMemoryBackendConfig, parseUri, removeTrailingSlash };
 //# sourceMappingURL=angular-in-memory-web-api.js.map
