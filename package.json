@@ -1,0 +1,34 @@
+{
+  "name": "angular-in-memory-web-api",
+  "version": "0.6.0+8.sha-65eacbf.with-local-changes",
+  "description": "An in-memory web api for Angular demos and tests",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angular/in-memory-web-api.git"
+  },
+  "keywords": [
+    "RxJS",
+    "Angular",
+    "API"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/angular/in-memory-web-api/issues"
+  },
+  "homepage": "https://github.com/angular/in-memory-web-api#readme",
+  "peerDependencies": {
+    "@angular/common": ">=6.0.0 <8.0.0",
+    "@angular/core": ">=6.0.0 <8.0.0",
+    "rxjs": "^6.0.0"
+  },
+  "sideEffects": false,
+  "main": "./bundles/angular-in-memory-web-api.umd.js",
+  "fesm5": "./fesm5/angular-in-memory-web-api.js",
+  "fesm2015": "./fesm2015/angular-in-memory-web-api.js",
+  "esm5": "./esm5/in-memory-web-api.js",
+  "esm2015": "./esm2015/in-memory-web-api.js",
+  "typings": "./in-memory-web-api.d.ts",
+  "module": "./fesm5/angular-in-memory-web-api.js",
+  "es2015": "./fesm2015/angular-in-memory-web-api.js"
+}
