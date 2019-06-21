@@ -9,8 +9,8 @@ export declare class InMemoryWebApiModule {
     *  Usually imported in the root application module.
     *  Can import in a lazy feature module too, which will shadow modules loaded earlier
     *
-    * @param {Type} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
-    * @param {InMemoryBackendConfigArgs} [options]
+    * @param dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
+    * @param options
     *
     * @example
     * InMemoryWebApiModule.forRoot(dbCreator);

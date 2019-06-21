@@ -2085,8 +2085,8 @@
         *  Usually imported in the root application module.
         *  Can import in a lazy feature module too, which will shadow modules loaded earlier
         *
-        * @param {Type} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
-        * @param {InMemoryBackendConfigArgs} [options]
+        * @param dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
+        * @param options
         *
         * @example
         * HttpInMemoryWebApiModule.forRoot(dbCreator);
@@ -2100,12 +2100,12 @@
          *  Usually imported in the root application module.
          *  Can import in a lazy feature module too, which will shadow modules loaded earlier
          *
-         *
          * \@example
          * HttpInMemoryWebApiModule.forRoot(dbCreator);
          * HttpInMemoryWebApiModule.forRoot(dbCreator, {useValue: {delay:600}});
-         * @param {?} dbCreator
+         * @param {?} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
          * @param {?=} options
+         *
          * @return {?}
          */
         HttpClientInMemoryWebApiModule.forRoot = /**
@@ -2116,12 +2116,12 @@
          *  Usually imported in the root application module.
          *  Can import in a lazy feature module too, which will shadow modules loaded earlier
          *
-         *
          * \@example
          * HttpInMemoryWebApiModule.forRoot(dbCreator);
          * HttpInMemoryWebApiModule.forRoot(dbCreator, {useValue: {delay:600}});
-         * @param {?} dbCreator
+         * @param {?} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
          * @param {?=} options
+         *
          * @return {?}
          */
             function (dbCreator, options) {
@@ -2184,8 +2184,8 @@
         *  Usually imported in the root application module.
         *  Can import in a lazy feature module too, which will shadow modules loaded earlier
         *
-        * @param {Type} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
-        * @param {InMemoryBackendConfigArgs} [options]
+        * @param dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
+        * @param options
         *
         * @example
         * InMemoryWebApiModule.forRoot(dbCreator);
@@ -2199,12 +2199,12 @@
          *  Usually imported in the root application module.
          *  Can import in a lazy feature module too, which will shadow modules loaded earlier
          *
-         *
          * \@example
          * InMemoryWebApiModule.forRoot(dbCreator);
          * InMemoryWebApiModule.forRoot(dbCreator, {useValue: {delay:600}});
-         * @param {?} dbCreator
+         * @param {?} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
          * @param {?=} options
+         *
          * @return {?}
          */
         InMemoryWebApiModule.forRoot = /**
@@ -2215,12 +2215,12 @@
          *  Usually imported in the root application module.
          *  Can import in a lazy feature module too, which will shadow modules loaded earlier
          *
-         *
          * \@example
          * InMemoryWebApiModule.forRoot(dbCreator);
          * InMemoryWebApiModule.forRoot(dbCreator, {useValue: {delay:600}});
-         * @param {?} dbCreator
+         * @param {?} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
          * @param {?=} options
+         *
          * @return {?}
          */
             function (dbCreator, options) {
@@ -2279,19 +2279,19 @@
      */
 
     exports.BackendService = BackendService;
-    exports.getStatusText = getStatusText;
-    exports.isSuccess = isSuccess;
     exports.STATUS = STATUS;
     exports.STATUS_CODE_INFO = STATUS_CODE_INFO;
+    exports.getStatusText = getStatusText;
+    exports.isSuccess = isSuccess;
     exports.HttpClientBackendService = HttpClientBackendService;
     exports.InMemoryWebApiModule = InMemoryWebApiModule;
     exports.httpClientInMemBackendServiceFactory = httpClientInMemBackendServiceFactory;
     exports.HttpClientInMemoryWebApiModule = HttpClientInMemoryWebApiModule;
-    exports.parseUri = parseUri;
-    exports.removeTrailingSlash = removeTrailingSlash;
     exports.InMemoryDbService = InMemoryDbService;
     exports.InMemoryBackendConfigArgs = InMemoryBackendConfigArgs;
     exports.InMemoryBackendConfig = InMemoryBackendConfig;
+    exports.parseUri = parseUri;
+    exports.removeTrailingSlash = removeTrailingSlash;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

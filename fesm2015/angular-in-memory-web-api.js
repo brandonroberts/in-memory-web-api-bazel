@@ -1638,12 +1638,12 @@ class HttpClientInMemoryWebApiModule {
      *  Usually imported in the root application module.
      *  Can import in a lazy feature module too, which will shadow modules loaded earlier
      *
-     *
      * \@example
      * HttpInMemoryWebApiModule.forRoot(dbCreator);
      * HttpInMemoryWebApiModule.forRoot(dbCreator, {useValue: {delay:600}});
-     * @param {?} dbCreator
+     * @param {?} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
      * @param {?=} options
+     *
      * @return {?}
      */
     static forRoot(dbCreator, options) {
@@ -1688,12 +1688,12 @@ class InMemoryWebApiModule {
      *  Usually imported in the root application module.
      *  Can import in a lazy feature module too, which will shadow modules loaded earlier
      *
-     *
      * \@example
      * InMemoryWebApiModule.forRoot(dbCreator);
      * InMemoryWebApiModule.forRoot(dbCreator, {useValue: {delay:600}});
-     * @param {?} dbCreator
+     * @param {?} dbCreator - Class that creates seed data for in-memory database. Must implement InMemoryDbService.
      * @param {?=} options
+     *
      * @return {?}
      */
     static forRoot(dbCreator, options) {
@@ -1735,6 +1735,6 @@ InMemoryWebApiModule.decorators = [
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { BackendService, getStatusText, isSuccess, STATUS, STATUS_CODE_INFO, HttpClientBackendService, InMemoryWebApiModule, httpClientInMemBackendServiceFactory, HttpClientInMemoryWebApiModule, parseUri, removeTrailingSlash, InMemoryDbService, InMemoryBackendConfigArgs, InMemoryBackendConfig };
+export { BackendService, STATUS, STATUS_CODE_INFO, getStatusText, isSuccess, HttpClientBackendService, InMemoryWebApiModule, httpClientInMemBackendServiceFactory, HttpClientInMemoryWebApiModule, InMemoryDbService, InMemoryBackendConfigArgs, InMemoryBackendConfig, parseUri, removeTrailingSlash };
 
 //# sourceMappingURL=angular-in-memory-web-api.js.map
